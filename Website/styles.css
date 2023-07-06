@@ -1,0 +1,99 @@
+#divider{
+    margin: 5px;
+    border: 1px solid;
+    margin-left: 0;
+    width: 100vw;
+}
+body{
+    margin: 0;
+    background-color:rgb(85, 85, 85)
+}
+button{
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: 'Chivo Mono', monospace;
+    border: 1px solid;
+    border-radius: 6px;
+    background-color: rgb(109, 109, 109);
+    padding: 5px;
+}
+button:hover{
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: 'Chivo Mono', monospace;
+    border: none;
+    border-radius: 6px;
+    background-color: rgb(129, 129, 129);
+    cursor: pointer;
+}
+html{
+    font-family: 'Chivo Mono', monospace;
+}
+.item{
+    border: 1px solid;
+    margin: 10px;
+    padding: 5px;
+    background-color: rgb(90, 90, 90);
+    border-radius: 10px;
+}
+.item h6{
+    margin: 0;
+}
+#item{
+    border: none;
+    height: 1px;
+    color: #000000;
+    background-color: #070707; 
+}
+body h1, h2, h3, h4, h5, h6{
+    padding: 5px;
+}
+navigation{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#mainItems{
+    display: flex;
+    flex-direction: column;
+}
+#progressContainer{
+    overflow: scroll;
+    height: 80vh;
+}
+.item h2{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+#title {
+    position: relative;
+    text-align: center;
+    margin: 0;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+#titleIMG {
+    width: 550px;
+    height: auto;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: 0;
+}
+#plutoIMG {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin-left: 50px;
+    margin-top: 15px;
+    margin-right: 0;
+}
+h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+    font-size: 50px;
+    color: rgb(173, 173, 173)
+}
