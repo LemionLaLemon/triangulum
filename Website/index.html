@@ -3,14 +3,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@300&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 <html>
     <head>
         <title>Triangulum</title>
-        <link rel="icon" type="image/x-icon" href="https://firebasestorage.googleapis.com/v0/b/triangulum-32bdb.appspot.com/o/triangulumIcon.png?alt=media&token=996dd237-3cf2-4e87-b2cf-e3a0668a8a04">
     </head>
     <header>
         <div id="title">
             <center><h1 style="text-shadow: 0 0 20px #ffffffde;">Triangulum</h1></center>
+            <link rel="icon" type="image/x-icon" href="https://firebasestorage.googleapis.com/v0/b/triangulum-32bdb.appspot.com/o/triangulumIcon.png?alt=media&token=996dd237-3cf2-4e87-b2cf-e3a0668a8a04">
         </div>
       </header>
     <hr id="divider">
@@ -19,65 +21,33 @@
         <a href="game.html"><button>Game</button></a>
         <a href="https://discord.gg/aJFF526veg"><button>Discord Server</button></a>
         <a href="/developers.html" class="nav-link"><button>Developers</button></a>
-        <label class="switchLabel">flashlight</label>
-        <div class="switch">
-          <label class="switch">
-            <input type="checkbox" id="flashlight">
-            <span class="slider round"></span>
-          </label>
-        </div>
     </navigation>
+    <hr id="divider">
+    <div id="row1">
+      <div id="Pc">
+        <center><p id="PcT">% completed</p></center>
+        <center><canvas id="circleCanvas" width="90" height="90"></canvas></center>
+      </div>
+      <div id="Ct">
+        <center><p id="PcT">Working on:</p></center>
+        <hr>
+        <span style="margin-left: 5px;">Current:</span>
+        <span id="currentWork"></span>
+        <br>
+        <br>
+        <span style="margin-left: 5px;">Later:</span>
+        <span id="nextWork"></span>
+      </div>
+    </div>
+    <div id="row2">
+    </div>
+    <hr id="divider">
     <h2>Development Progress</h2>
     <hr id="divider">
     <div id="mainItems">
-        
     </div>
-    <div id="torch-container">
-        <div id="torch">
-          <img class="torch" src="torchlight.png" alt="Torch">
-        </div>
-        <div id="torch-overlay"></div>
-      </div>
 </html>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function(event) {
-  var torch = document.getElementById("torch");
-  var flashlightSwitch = document.getElementById("flashlight");
-  var torchImage = document.querySelector("#torch img");
-
-  var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-  document.addEventListener("mousemove", function(event) {
-    var x = event.clientX;
-    var y = event.clientY + scrollY;
-    var offsetX = 45;
-    var offsetY = -torch.offsetHeight / 2;
-
-    if (flashlightSwitch.checked) {
-      // Calculate the rotation angle based on mouse position
-      var screenWidth = window.innerWidth;
-      var degreeRange = 30;
-      var angle = (x / screenWidth - 0.5) * degreeRange;
-
-      // Apply rotation and translation to the torch element
-      torch.style.transform = "translate(" + (x - offsetX) + "px, " + (y + offsetY) + "px) rotate(" + angle + "deg)";
-
-      // Show the torch image
-      torchImage.style.display = "block";
-    } else {
-      // Hide the torch image
-      torchImage.style.display = "none";
-    }
-  });
-
-  window.addEventListener("scroll", function() {
-    scrollY = window.pageYOffset || document.documentElement.scrollTop;
-  });
-});
-</script>
 <script>
   // Initialize Firebase
   var firebaseConfig = {
@@ -125,4 +95,96 @@ document.addEventListener("DOMContentLoaded", function(event) {
       mainItemsContainer.appendChild(div);
     });
   });
+</script>
+<script>
+var collectionRef = firebase.firestore().collection("header");
+
+// Retrieve a specific document from the collection
+var documentRef = collectionRef.doc("percentageCompleted");
+
+// Get the document
+documentRef.get().then(function(doc) {
+    if (doc.exists) {
+        // Document found
+        var percentage = doc.data().percentage;
+        console.log("Percentage:", percentage);
+
+        // Get the canvas element
+        var canvas = document.getElementById('circleCanvas');
+        var context = canvas.getContext('2d');
+
+        // Calculate the angle (in radians) based on the percentage
+        var angle = (percentage / 100) * 2 * Math.PI;
+
+        // Set the circle properties
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+        var radius = canvas.width / 2 - 5;
+        var startAngle = -0.5 * Math.PI; // Starting from the top
+        var endAngle = startAngle + angle;
+
+        // Draw the background circle
+        context.beginPath();
+        context.arc(x, y, radius, 0, 2 * Math.PI);
+        context.strokeStyle = 'rgba(238, 238, 238, 0.123)';
+        context.lineWidth = 10;
+        context.stroke();
+
+        // Draw the progress arc
+        context.beginPath();
+        context.arc(x, y, radius, startAngle, endAngle);
+        context.strokeStyle = 'rgb(94, 183, 94)';
+        context.lineWidth = 10;
+        context.lineCap = 'round';
+        context.stroke();
+
+        // Display the percentage text
+        context.fillStyle = '#000';
+        context.font = '24px Arial';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(percentage + '%', x, y);
+    } else {
+        // Document not found
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+</script>
+<script>
+  var collectionRef = firebase.firestore().collection("header");
+
+// Retrieve currentWork document
+var currentWorkRef = collectionRef.doc("currentWork");
+currentWorkRef.get().then(function(doc) {
+    if (doc.exists) {
+        // Document found
+        var currentWorkText = doc.data().text;
+        var currentWorkSpan = document.getElementById("currentWork");
+        currentWorkSpan.innerText = currentWorkText;
+    } else {
+        // Document not found
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+
+// Retrieve nextWork document
+var nextWorkRef = collectionRef.doc("nextWork");
+nextWorkRef.get().then(function(doc) {
+    if (doc.exists) {
+        // Document found
+        var nextWorkText = doc.data().text;
+        var nextWorkSpan = document.getElementById("nextWork");
+        nextWorkSpan.innerText = nextWorkText;
+    } else {
+        // Document not found
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+
 </script>
