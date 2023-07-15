@@ -19,13 +19,6 @@
         <a href="game.html"><button>Game</button></a>
         <a href="https://discord.gg/aJFF526veg"><button>Discord Server</button></a>
         <a href="/developers.html" class="nav-link"><button>Developers</button></a>
-        <label class="switchLabel">flashlight</label>
-        <div class="switch">
-            <label class="switch">
-              <input type="checkbox" id="flashlight">
-              <span class="slider round"></span>
-            </label>
-          </div>
     </navigation>
     
     <hr id="divider">
@@ -65,12 +58,6 @@
             </div>
         </div>
     </div>
-    <div id="torch-container">
-        <div id="torch">
-          <img class="torch" src="torchlight.png" alt="Torch">
-        </div>
-        <div id="torch-overlay"></div>
-      </div>
 </html>
 <style>
     h3{
@@ -78,39 +65,3 @@
         text-shadow: 0 0 10px #fff;
     }
 </style>
-<script>
-   document.addEventListener("DOMContentLoaded", function(event) {
-  var torch = document.getElementById("torch");
-  var flashlightSwitch = document.getElementById("flashlight");
-  var torchImage = document.querySelector("#torch img");
-
-  var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-  document.addEventListener("mousemove", function(event) {
-    var x = event.clientX;
-    var y = event.clientY + scrollY;
-    var offsetX = 45;
-    var offsetY = -torch.offsetHeight / 2;
-
-    if (flashlightSwitch.checked) {
-      // Calculate the rotation angle based on mouse position
-      var screenWidth = window.innerWidth;
-      var degreeRange = 30;
-      var angle = (x / screenWidth - 0.5) * degreeRange;
-
-      // Apply rotation and translation to the torch element
-      torch.style.transform = "translate(" + (x - offsetX) + "px, " + (y + offsetY) + "px) rotate(" + angle + "deg)";
-
-      // Show the torch image
-      torchImage.style.display = "block";
-    } else {
-      // Hide the torch image
-      torchImage.style.display = "none";
-    }
-  });
-
-  window.addEventListener("scroll", function() {
-    scrollY = window.pageYOffset || document.documentElement.scrollTop;
-  });
-});
-    </script>
